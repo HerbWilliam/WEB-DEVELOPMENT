@@ -1,0 +1,28 @@
+<html> <!-- Project: DOM Volume Manipulation, William Herb -->
+<head>
+<h1> Use the DOM to alter the video's volume! </h1>
+<h2> William Herb </h2>
+</head>
+<body>
+<video id="videoEmb" width="500" height="315"
+src="movie.mp4" autoplay>
+</video> <br> <br>
+
+<input type="button" id="higher" value="Higher Volume" onclick="higherVolume();"> </input> <input type="button" id="lower" value="Lower Volume" onclick="lowerVolume();"> </input>
+<script>
+function lowerVolume() {
+var videoVar = document.getElementById("videoEmb");
+var vol = videoVar.volume;
+vol = vol - 0.2;
+videoVar.volume = vol;
+}
+
+function higherVolume() {
+var videoVar = document.getElementById("videoEmb");
+var vol = videoVar.volume;
+vol = vol + 0.2;
+videoVar.volume = vol;
+}
+</script>
+</body>
+</html>
