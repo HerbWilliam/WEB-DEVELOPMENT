@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<!-- Project: SVG Shape Generator. By: William Herb -->
+
+<html>
+<head>
+
+<h1> Click the buttons below to generate an SVG shape with random attributes. </h1>
+	<style>
+	
+	</style>
+    <script> 
+    function startup() {
+    q=evt.target.ownerDocument;
+    
+        
+    }
+    function choose(f){ //f will be one of the values from the buttons.
+        
+    switch(f) {
+            
+    case "Rectangle":
+    var textarea = document.getElementById("L");
+    var x = (Math.floor((Math.random() * 101)));
+    var y = (Math.floor((Math.random() * 101)));
+    var width = (Math.floor((Math.random() * 100)));
+    var height = (Math.floor((Math.random() * 100)));
+    var rgbNum1 = Math.floor((Math.random() * 256));
+    var rgbNum2 = Math.floor((Math.random() * 256));
+    var rgbNum3 = Math.floor((Math.random() * 256)); //makes random values for each rect attribute.
+            
+    var Q = "<rect x=\"" + x + "%\"" + " y=\"" + y + "%\"" + " width=\"" + width + "px\"" + " height=\"" + height + "px\" " + "stroke=\"rgb(" + rgbNum1 + "," + rgbNum2 + "," + rgbNum3 + ")\" /> "; 
+    textarea.value = Q;
+            
+    var svg1 = document.getElementsByTagName('svg')[0];
+    var addRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+	svg1.appendChild(addRect);
+	addRect.style.x = x + "%";
+	addRect.style.y = y + "%";
+	addRect.style.width = width + "%";
+	addRect.style.height = height + "%";
+	addRect.style.fill = "rgb(" + rgbNum1 + ", " + rgbNum2 + ", " + rgbNum3 + ")";
+    break;
+            
+    case "Ellipse":
+    var textarea = document.getElementById("L");
+    var cx = (Math.floor((Math.random() * 101)));
+    var cy = (Math.floor((Math.random() * 101)));
+    var rx = (Math.floor((Math.random() * 50)));
+    var ry = (Math.floor((Math.random() * 50)));
+    var rgbNum1 = Math.floor((Math.random() * 256));
+    var rgbNum2 = Math.floor((Math.random() * 256));
+    var rgbNum3 = Math.floor((Math.random() * 256)); //makes random values for each circle attribute.
+            
+    var Q = "<ellipse cx=\"" + cx + "%\"" + " cy=\"" + cy + "%\"" + " rx=\"" + rx +  "%\"" + " ry=\"" + ry + "%\" " + "fill=\"rgb(" + rgbNum1 + "," + rgbNum2 + "," + rgbNum3 + ")\" /> ";  
+    textarea.value=Q;
+            
+    var svg1 = document.getElementsByTagName('svg')[0]; //uses namespace to find svg object.
+    var addEll = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+    addEll.style.fill = "rgb(" + rgbNum1 + ", " + rgbNum2 + ", " + rgbNum3 + ")";
+    addEll.style.strokeWidth = "5px";
+	addEll.style.cx = cx + "%";
+	addEll.style.cy = cy + "%";
+	addEll.style.rx = rx + "%";
+	addEll.style.ry = ry + "%";
+	svg1.appendChild(addEll);
+    break;
+           
+	case "Circle":
+	var textarea = document.getElementById("L");
+	var cx = Math.floor(Math.random() * 100);
+	var cy = Math.floor(Math.random() * 100);
+	var r = Math.floor(Math.random() * 50);
+	var rgbNum1 = Math.floor((Math.random() * 256));
+    var rgbNum2 = Math.floor((Math.random() * 256));
+    var rgbNum3 = Math.floor((Math.random() * 256));
+	
+	
+	var Q = "<circle cx=\"" + cx + "%\"" + " cy=\"" + cy + "%\"" + " r=\"" + r + "%\"" + " fill=\"rgb(" + rgbNum1 + "," + rgbNum2 + "," + rgbNum3 + ")\"/> ";
+	textarea.value=Q;
+	
+	var svg1 = document.getElementsByTagName('svg')[0]; //uses namespace to find svg object.
+    var addCircle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+	addCircle.style.cx = cx + "%";
+	addCircle.style.cy = cy + "%";
+	addCircle.style.r = r + "%";
+	addCircle.style.fill = "rgb(" + rgbNum1 + ", " + rgbNum2 + ", " + rgbNum3 + ")";
+	svg1.appendChild(addCircle);
+	
+}
+}
+    </script>
+</head>
+<body>
+<style>
+    #svgContain {
+	outline: 3px solid green;
+	float: left;	
+	}
+</style>
+
+<input type="button" id="btnRect" value="Rectangle" onclick="choose(this.value)";> <input type="button" id="btnEll" value="Ellipse" onclick="choose(this.value);"> <input type="button" id="btnCircle" value="Circle" onclick="choose(this.value);"> </input>
+<div id="LDiv" height="150px" width="150px"> <!-- the div for the textarea in which the code is output -->
+    <textarea id="L" rows="4" cols="25"> </textarea> <!-- the textarea in which the code is output -->
+</div>
+<div id="svgContain" x="60" y="0%" height="250px" width="250px">
+<svg id="R" xmlns="http://www.w3.org/2000/svg" x="50%" y="0%" height="400px" width="400px"> <!-- the svg in which the code will be inserted. -->
+	
+</svg>
+
+</div>
+    </body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE HTML> <!-- William Herb, Homework 03, due date: 3/1/2019 -->
+
+
+<html>
+<head>
+<script>
+function setgrad() {
+var firstColor = document.getElementById("color1").value; <!-- color of the first desired color in the gradient. -->
+var secondColor = document.getElementById("color2").value; <!-- color of the second desired color in the gradient. -->
+var firstAlpha = parseInt(document.getElementById("alpha1").value);
+var secondAlpha = parseInt(document.getElementById("alpha2").value); //all values are now gotten from the page, and below is the calculation and output.
+document.getElementById("divColor").style = "background-image: radial-gradient(" + firstColor + " " + firstAlpha + "%," + secondColor + " " + secondAlpha + "%);"
+}	
+
+</script>
+
+	<style>
+		
+		#divColor { /* this is the div in which the gradient will be put. */
+				height: 500px;
+				width: 50%;
+				background-color: red;
+			}
+		table, th, td {
+  border: 1px solid black;
+}
+	</style>
+	<title> Radial Gradient Control </title>
+
+	<h1> William Herb </h1>
+
+	
+</head>
+
+<body>
+
+<div id="divColor"> 
+
+	</div> <br> <br>
+	
+	<table style="width:25%"> <!-- width can be adjusted here depending on desired size of the gradient. -->
+		<tr>
+			<th> Stop 1 </th>
+			<th> Stop 2 </th>
+		</tr>
+		
+		<tr>
+			<td> <input type="color" id="color1"> </input> </td>
+			<td> <input type="color" id="color2"> </input> </td>
+		</tr>
+		
+		<tr> 
+			<td> alpha: <input type="text" id="alpha1"> </td>
+			<td> alpha: <input type="text" id="alpha2"> </td>
+		</tr>
+		
+		<tr> <td align="center" style="text-align:center"> <input type="button" value="Set Gradient" id="btnSet" onclick="setgrad()"> </input> </td> </tr>
+		</table>
+	
+</body>
+
+
+</html>
