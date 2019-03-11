@@ -1,0 +1,165 @@
+<!DOCTYPE HTML> <!-- Project: Polygon Generator, William Herb -->
+<meta charset="UTF-8">
+<html> 
+<style>
+    
+    svg { /* sets svg background as beige, and aligns it with the page. */
+    background-color: beige;    
+        position:absolute; 
+        top:0%; 
+        bottom:0; 
+        right:0%; 
+        left:0%; 
+}
+    }
+    h1 { /* aligns the text header */
+    text-align: center;
+    }    
+</style>
+    <head> <title> William Herb's Polygon Editor </title>
+    
+</head>    
+
+
+<body>
+<div id="divSVG">
+<svg id="SVG" onclick="add(evt);" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<text x="20%" y="5%" font-family="verdana">
+Click anywhere to start your shape, and click on your first circle to complete it! (Button = RESET)
+</text>
+<rect x="3%" y="2%" width="100" height="35" onclick="remove()" fill="turquoise"> </rect>
+</svg>
+    </div> <!-- page is now designed and output as far as HTML goes. The rest of the "stuff" happens in Javascript (and SVG through JS.) -->
+    <script>
+    var xmlns="http://www.w3.org/2000/svg";
+    var xlink="http://www.w3.org/1999/xlink"; //sets namespace variables.
+    var root = "";
+    root = document.getElementById("divSVG").firstElementChild; //sets "root" variable as the svg element. used in root.appendChild below.
+    var counter = 0;
+    var firstPointX;
+    var firstPointY;
+    var finalPointX;
+    var finalPointY;
+    var circleNum = 1;
+    var lineNum = 1;
+    var finalSimpleX;
+    var finalSimpleY; 
+    var CurrentSimpleX;
+    var newTxt = "Click anywhere to start your shape, and click on your first circle to complete it! (Button = RESET)";
+    var realCount;
+    var firstPoint = false;
+    var CurrentSimpleY; //current/finalSimpleX & current/finalSimpleY are used to allow the user to "mess up" a bit when clicking to end a shape. 
+                     // I do this by dividing both first X&Y coordinates and final X&Y coordinates by 45. If the floor of those numbers
+                    //(the floor is taken to get rid of the decimal) are equal, then the shape is completed.
+
+function drag(evt) { //does not work correctly. Only there for educational/grading purposes
+counter = 9001; //sets the counter to above the threshold. This disables the add function so the vertices can be moved without new points.
+id = evt.currentTarget.id; //gets the circle that was clicked upon.
+
+var x = evt.clientX; //gets mouse x position
+var y = evt.clientY; //gets mouse y position
+id.setAttributeNS(null, "cx", evt.pageX); //sets circle position to where mouse x position is
+id.setAttributeNS(null, "cy", evt.pageY); //sets circle position to where mouse y position is
+}
+
+function remove() {
+/* for($i = 0; i = realCount; i++) {
+var circ = document.getElementById("circle" + i);
+circ.parentNode.removeChild(circ);    
+var lin = document.getElementById("line" + i);
+lin.parentNode.removeChild(lin); */
+    
+while (root.lastChild) {
+    root.removeChild(root.lastChild); //This solution was found on several sites such as stackoverflow.com. It is a simple solution,
+                                     //which many people likely use, but the source I found it at is
+                                    //https://stackoverflow.com/questions/3674265/is-there-an-easy-way-to-clear-an-svg-elements-contents
+}
+var textNew = document.createElementNS(xmlns, "text");
+textNew.setAttributeNS(null, "x", "20%");
+textNew.setAttributeNS(null, "y", "5%");
+textNew.setAttributeNS(null, "font-family", "verdana");
+textNew.innerHTML = newTxt; //adds the original text back to the webpage.
+    
+var rectNew = document.createElementNS(xmlns, "rect");
+rectNew.setAttributeNS(null, "y", "2%");
+rectNew.setAttributeNS(null, "x", "3%");
+rectNew.setAttributeNS(null, "height", "35");
+rectNew.setAttributeNS(null, "width", "100");
+rectNew.setAttributeNS(null, "fill", "turquoise");
+rectNew.setAttributeNS(null, "onclick", "remove()"); //makes the rectangle keep having the remove() function again and again.
+
+counter = 0;
+root.appendChild(textNew); //add the text node back with the same attributes.
+root.appendChild(rectNew); //add the retangle node back with the same attributes.
+}
+        
+        
+function add(event) {
+var T=event.target
+	if (T.nodeName=="rect") {    //if the click is on a rectangle, then abort the function. This is to allow the remove() function to run.
+    return;                      //this snippet of code is borrowed directly from Dr. David Dailey's online webpage. 
+    }                           //view-source:http://srufaculty.sru.edu/david.dailey/svg/makeDragDrop.svg lines 20 & 21
+    
+
+if (counter < 8999) { //if counter is below 9000 (it will only be over 9000 if the user clicks an existing vertex.)
+var C=document.createElementNS(xmlns, "circle");
+C.setAttributeNS(null, "r", "10");
+C.setAttributeNS(null, "cx", event.pageX);
+C.setAttributeNS(null, "cy", event.pageY); //A circle is created with mouse coordinates.
+//C.setAttributeNS(null, "id", "circle" + circleNum); //sets circle0, circle1, etc... as ID of new objects
+    if (counter == 0) {
+C.setAttributeNS(null, "fill", "grey"); //if first circle, then fill will be red. This makes finishing the circle easier for the user.
+   root.appendChild(C);
+    realCount += 1;
+    //circleNum += 1;
+    }
+    else {
+root.appendChild(C);  
+realCount += 1;
+//circleNum += 1; //circleNum will be +1'd any time a new circle is added.
+}
+} else {
+    counter = 0; //if counter is not below 8999, then the shape must've just been completed. This else statement
+                //resets the counter and lets the user start a new shape!
+    return;
+}
+
+if (counter == 0) { //this is the first shape. X and Y are recorded. Also, a separate final X and Y are stored for knowing if the shape is done.
+ firstPointX = event.pageX;
+ firstPointY = event.pageY;
+ finalPointX = firstPointX;
+ finalPointY = firstPointY;
+ finalSimpleX = Math.floor(finalPointX / 45);
+ finalSimpleY = Math.floor(finalPointY / 45);
+}
+if (counter != 0 && counter < 9001) //If true, then this is not the first point. And the shape is not finished.
+                                   //Therefore, lines needs to be drawn between points.
+    {
+    var currentPointX = event.pageX; //gets current X and Y point
+    var currentPointY = event.pageY;
+    CurrentSimpleX = Math.floor(currentPointX / 45); //converts it to simplified points to provide an allowance for error by the user
+    CurrentSimpleY = Math.floor(currentPointY / 45);
+    var L = document.createElementNS(xmlns, "line"); //creates a line 
+    L.setAttributeNS(null, "x1", firstPointX);
+    L.setAttributeNS(null, "y1", firstPointY); //first point of line is the original point
+    L.setAttributeNS(null, "x2", currentPointX);
+    L.setAttributeNS(null, "y2", currentPointY); //second point of line is current point
+    L.setAttributeNS(null, "stroke-width", "5");
+    L.setAttributeNS(null, "stroke", "black");
+   // L.setAttributeNS(null, "id", "line" + lineNum); sets the id of the line being created. would be used in dragging the vertex.
+    firstPointX = currentPointX;
+    firstPointY = currentPointY; //sets firstPoints to currentPoints. I tried to find another way to program / word this,
+                                //but this was the only workable solution I could find.
+        if (CurrentSimpleX == finalSimpleX && CurrentSimpleY == finalSimpleY) { //in other words, if an existing vertex is clicked
+    root.appendChild(L); lineNum += 1; realCount += 1; counter = 9000; //if user clicks an existing vertex, then add the line and set counter > 9000 to abort.
+        }
+        else
+        { root.appendChild(L); realCount += 1; lineNum += 1; } //if user clicks existing vertex, add the line and then abort the polygon. If not, add the line.
+        }
+counter += 1; /*no matter what, add 1 to the counter each time. The counter will only be values 0-9000. 9000 is an arbitrary value that
+             the user will most likely never reach, but it is possible if they get very intricate with one shape/design. I would've set
+             the value to 100 as the maximum, but did not want to set that much control over how creative the user can be. */       
+    }
+</script>
+</body>
+</html>
