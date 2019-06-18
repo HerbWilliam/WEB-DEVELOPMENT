@@ -1,0 +1,184 @@
+
+<!DOCTYPE HTML> <!-- William Herb, Homework 05: Stock Price. CPSC 427: Interface Design, Dr. Zhou -->
+<html> <!-- The price from the php file and additional calculated variables can be tracked through the console! -->
+<style>
+#stockCanvas {
+border: 1px solid grey;
+}
+</style>
+<head>
+<title> Stock Price </title>
+<h1> William Herb </h1>
+<h2 id="date1"> </h2> <br> <br>
+<canvas id="stockCanvas" height="300px" width="500px"> </canvas> <br> <!-- canvas element made -->
+ <br> 
+Date format: <input type="radio" id="btnUS" name="format"> </input> US format <input type="radio" id="btnEuro" name="format"> </input> European format <input type="radio" id="btnChina" name="format"> </input> Chinese format
+</head>
+<body onload="radCheck()">
+<script> 
+
+
+//variables below are declared as global variables.
+var previousX;
+var previousY;
+var stockPrice = 0;
+var minuteCount = 31;
+var PriceYCoord;
+var count = 0;
+var fullDate = new Date(); //Date object is used in order to correctly display the date. getDate, getMonth, etc. are also used.
+var month = fullDate.getMonth() + 1;
+var day = fullDate.getDate();
+var year = fullDate.getFullYear();
+document.getElementById("date1").innerHTML = month + "/" + day + "/" + year; //initializes the date format as US. updatable through radio buttons.
+
+function radCheck() {
+document.getElementById("btnUS").addEventListener("change", function () {
+	if (document.getElementById("btnUS").checked == true) {
+	document.getElementById("date1").innerHTML = month + "/" + day + "/" + year; //US Format (mm/dd/yyyy)
+	}});
+
+document.getElementById("btnEuro").addEventListener("change", function () {
+	if (document.getElementById("btnEuro").checked == true) {
+	document.getElementById("date1").innerHTML = day + "/" + month + "/" + year; //European Format (dd/mm/yyyy)
+	}});
+
+document.getElementById("btnChina").addEventListener("change", function () {
+	if (document.getElementById("btnChina").checked == true) {
+	document.getElementById("date1").innerHTML = year + "/" + month + "/" + day; //Chinese Format (yyyy/mm/dd)
+	}
+	});
+
+
+}
+var canvas = document.getElementById("stockCanvas");
+var ctx = canvas.getContext("2d");
+ctx.beginPath();
+ctx.moveTo(25, 285);
+ctx.lineTo(482, 285);
+ctx.strokeStyle = "#808080";
+ctx.stroke();
+ctx.closePath(); //Makes the main X-axis line.
+
+ctx.beginPath();
+ctx.moveTo(25, 285);
+ctx.lineTo(25, 0);
+ctx.strokeStyle = "#808080";
+ctx.stroke();
+ctx.closePath(); //Makes the main Y-axis line.
+
+
+var xdashX = 25; //initializes the variable to make dashes on the X axis.
+
+for (var i = 0; i <= 40; i++) {
+xdashX += 11; //adds 11 to the x coordinate each time (this line and lines below make the dashes
+ctx.beginPath();
+ctx.moveTo(xdashX,285);
+ctx.lineTo(xdashX,280);
+ctx.strokeStyle = "#808080";
+ctx.stroke();
+ctx.font = "12px Arial";
+ctx.fillText("10 AM", 40, 298); //these fillText lines make the appropriate time and price labels on the X/Y Axis.
+ctx.fillText("11 AM", 110, 298);
+ctx.fillText("12 PM", 180, 298);
+ctx.fillText("1 PM", 245, 298);
+ctx.fillText("2 PM", 315, 298);
+ctx.fillText("3 PM", 380, 298);
+ctx.fillText("4 PM", 450, 298);
+ctx.font = "8px Arial";
+ctx.fillText("$10.00", 0, 285);
+ctx.fillText("$10.05", 0, 260);
+ctx.fillText("$10.10", 0, 235);
+ctx.fillText("$10.15", 0, 205);
+ctx.fillText("$10.20", 0, 180);
+ctx.fillText("$10.25", 0, 153);
+ctx.fillText("$10.30", 0, 125);
+ctx.fillText("$10.35", 0, 100);
+ctx.fillText("$10.40", 0, 70);
+ctx.fillText("$10.45", 0, 45);
+ctx.fillText("$10.50", 0, 18);
+ctx.closePath();
+} //dash marks on X axis are now drawn.
+
+var ydashY = 285;
+for (var i = 0; i <= 9; i++) {
+ydashY -= 27;
+ctx.beginPath();
+ctx.moveTo(25,ydashY);
+ctx.lineTo(30,ydashY);
+ctx.strokeStyle="#808080";
+ctx.stroke();
+ctx.closePath();
+ //The for loop above makes the dashes for the y axis.
+}
+//end of canvas
+
+//got help from W3Schools and my previous dice assignment on AJAX code formatting
+setInterval(function() {
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			stockPrice = this.responseText;
+	console.log("stockPrice = " + stockPrice);
+if (stockPrice == 10.00) {
+	PriceYCoord = "285"; }
+if (stockPrice == 10.05) {
+	PriceYCoord = "260"; }
+if (stockPrice == 10.1) {
+	PriceYCoord = "235"; }
+if (stockPrice == 10.15) {  //This series of If conditionals provides the Y coordinate for each of the corresponding
+	PriceYCoord = "205"; } //prices of the stock that the php file sends to the webpage.
+if (stockPrice == 10.2) {
+	PriceYCoord = "180"; }
+if (stockPrice == 10.25) {
+	PriceYCoord = "153"; }
+if (stockPrice == 10.3) {
+	PriceYCoord = "125"; }
+if (stockPrice == 10.35) {
+	PriceYCoord = "100"; } 
+if (stockPrice == 10.4) {
+	PriceYCoord = "70"; }
+if (stockPrice == 10.45) {
+	PriceYCoord = "45"; }
+if (stockPrice == 10.5) {
+	PriceYCoord = "18"; }
+
+var canvas = document.getElementById("stockCanvas");
+var ctx = canvas.getContext("2d");
+if (count == 0) {
+	ctx.beginPath();
+	ctx.moveTo(25, 285);
+	ctx.lineTo(minuteCount, PriceYCoord);
+	ctx.strokeStyle = "#0000FF";
+	ctx.stroke();
+	ctx.closePath();
+	previousX = minuteCount;
+	previousY = PriceYCoord; //When count is 0, it sets the coordinates as (25,285) and then draws the first line.
+}
+count++;
+
+
+if (count != 0 && minuteCount <= 490) { //since canvas element's width is 500px, 490px is set as the max line X coordinate.
+	ctx.beginPath();
+	ctx.moveTo(previousX,previousY); //previousX and previousY will be used in the moveTo in order to keep the lines consistent.
+	ctx.lineTo(minuteCount, PriceYCoord); //the line will be drawn as minuteCount and PriceYCoord are updated each tick.
+	ctx.strokeStyle = "#0000FF"; //blue
+	ctx.lineWidth = 2; //2px thick line
+	ctx.stroke();
+	ctx.closePath();
+	console.log("PreviousX = " + previousX);
+	console.log("PreviousY = " + previousY);
+	previousX = minuteCount;
+	previousY = PriceYCoord;
+	console.log("MinuteCount (X Coord) = " + minuteCount);
+	console.log("PriceYCoord = " +PriceYCoord);
+	minuteCount += 11.20; //makes each line update one tick of progress.
+	}
+}
+}
+	xhttp.open("GET", "hw05.php", true);
+	xhttp.send()
+}, 2000);
+</script>
+</body>
+
+</html>
