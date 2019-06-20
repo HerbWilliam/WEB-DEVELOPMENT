@@ -6,3 +6,5 @@ $num = round($num);
 $num = $num * .05;
 
 echo $num;
+
+?>
